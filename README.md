@@ -95,6 +95,7 @@ python3 manage.py runserver
 
 Пример ответа:
 
+```
 {
     "id": 0,
     "text": "string",
