@@ -1,9 +1,8 @@
-import datetime
-
 from django.db.models import Avg
-from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
+
+from api.validators import validate_year
 from reviews.models import Categories, Comments, Genres, Review, Title
 
 
@@ -51,21 +50,15 @@ class TitleSerializerCreate(serializers.ModelSerializer):
         queryset=Genres.objects.all(),
         many=True
     )
+    year = serializers.IntegerField(
+        validators=[validate_year]
+    )
 
     class Meta:
         model = Title
         fields = (
             'id', 'name', 'year', 'description', 'genre', 'category'
         )
-
-    def validate_year(self, value):
-        if value > datetime.datetime.now().year and value < 0:
-            raise ValidationError(
-                'Вы ввели некорректный год.'
-                'Год создания произведения не может быть больше текущего'
-                'и меньше начала нашей эры.'
-            )
-        return value
 
 
 class ReviewsSerializer(serializers.ModelSerializer):

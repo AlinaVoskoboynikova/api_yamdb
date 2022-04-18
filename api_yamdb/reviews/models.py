@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
+
 from api.validators import validate_year
 
 User = get_user_model()
@@ -94,23 +95,34 @@ class Title(models.Model):
 
 class Review(models.Model):
     title = models.ForeignKey(
-        Title, on_delete=models.CASCADE, related_name='reviews'
+        Title, on_delete=models.CASCADE,
+        related_name='reviews',
+        help_text='Укажите произведение',
+        verbose_name='Произведение'
     )
-    text = models.TextField()
-    score = models.PositiveSmallIntegerField()
+    text = models.TextField(
+        help_text='Введите текст',
+        verbose_name='Текст'
+    )
+    score = models.PositiveSmallIntegerField(
+        help_text='Введите оценку от 1 до 10',
+        verbose_name='Оценка')
     pub_date = models.DateTimeField(
         'Дата добавления', auto_now_add=True, db_index=True
     )
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='reviews'
+        User, on_delete=models.CASCADE,
+        related_name='reviews',
+        help_text='Автор',
+        verbose_name='Автор'
     )
 
     class Meta:
-        constraints = [
+        constraints = (
             UniqueConstraint(
                 fields=['title', 'author'], name='unique_following'
             ),
-        ]
+        )
         ordering = ('pub_date',)
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
@@ -121,12 +133,21 @@ class Review(models.Model):
 
 class Comments(models.Model):
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='comments'
+        User, on_delete=models.CASCADE,
+        related_name='comments',
+        help_text='Автор',
+        verbose_name='Автор'
     )
     review = models.ForeignKey(
-        Review, on_delete=models.CASCADE, related_name='comments'
+        Review, on_delete=models.CASCADE,
+        related_name='comments',
+        help_text='Отзыв',
+        verbose_name='Отзыв'
     )
-    text = models.TextField()
+    text = models.TextField(
+        help_text='Введите текст',
+        verbose_name='Текст'
+    )
     pub_date = models.DateTimeField(
         'Дата добавления', auto_now_add=True, db_index=True
     )

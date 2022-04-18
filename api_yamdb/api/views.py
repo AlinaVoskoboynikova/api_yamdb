@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, viewsets
 from rest_framework.pagination import PageNumberPagination
+
 from api.filters import TitleFilter
 from api.pagination import ReviewsPagination
 from api.permissions import IsAdminOrReadOnly, IsAuthorOrReadOnlyPermission
@@ -45,7 +46,6 @@ class GenresViewSet(ListCreateDestroyMixin):
 class TitleViewSet(viewsets.ModelViewSet):
     """Вьюсет для обработки произведений"""
     queryset = Title.objects.all()
-    serializer_class = TitleSerializer
     pagination = PageNumberPagination
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)

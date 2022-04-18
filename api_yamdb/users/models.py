@@ -58,7 +58,9 @@ class User(AbstractUser):
     )
     password = models.CharField(
         max_length=10,
-        blank=True
+        blank=True,
+        verbose_name='Пароль',
+        help_text='Пароль пользователя'
     )
 
     @property

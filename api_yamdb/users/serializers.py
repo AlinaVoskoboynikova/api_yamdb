@@ -1,6 +1,22 @@
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
+
 from users.models import User
+
+
+def userandauthvalidate(data):
+    if data['username'] == 'me':
+        raise serializers.ValidationError(
+            'me - недопустимое имя пользователя!'
+        )
+    if User.objects.filter(username=data['username']).exists():
+        raise serializers.ValidationError(
+            'Username уже занят!'
+        )
+    if User.objects.filter(email=data['email']).exists():
+        raise serializers.ValidationError(
+            'Email уже занят!'
+        )
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,18 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
     )
 
     def validate(self, data):
-        if data['username'] == 'me':
-            raise serializers.ValidationError(
-                'me - недопустимое имя пользователя!'
-            )
-        if User.objects.filter(username=data['username']).exists():
-            raise serializers.ValidationError(
-                'Username уже занят!'
-            )
-        if User.objects.filter(email=data['email']).exists():
-            raise serializers.ValidationError(
-                'Email уже занят!'
-            )
+        userandauthvalidate(data)
         return data
 
     class Meta:
@@ -80,18 +85,7 @@ class AuthSignupSerializer(serializers.ModelSerializer):
     )
 
     def validate(self, data):
-        if data['username'] == 'me':
-            raise serializers.ValidationError(
-                'me - недопустимое имя пользователя!'
-            )
-        if User.objects.filter(username=data['username']).exists():
-            raise serializers.ValidationError(
-                'Username уже занят!'
-            )
-        if User.objects.filter(email=data['email']).exists():
-            raise serializers.ValidationError(
-                'Email уже занят!'
-            )
+        userandauthvalidate(data)
         return data
 
     class Meta:

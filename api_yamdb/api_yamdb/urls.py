@@ -1,5 +1,4 @@
 """YaMDb URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
 Examples:
@@ -24,6 +23,6 @@ urlpatterns = [
         TemplateView.as_view(template_name='redoc.html'),
         name='redoc'
     ),
-    path('api/v1/', include('users.urls', namespace='users')),
-    path('api/v1/', include('api.urls')),
+    path('api/', include('users.urls', namespace='users')),
+    path('api/', include('api.urls')),
 ]
